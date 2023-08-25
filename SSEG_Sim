@@ -1,0 +1,78 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Armica Quejado
+// 
+// Create Date: 08/23/2022 09:29:17 AM
+// Module Name: SSEG_Sim
+// Project Name: Vending Machine
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module SSEG_Sim(
+// no ports to test in sim
+  );
+  
+    //declare inputs and outputs to give to your module
+    logic[4:0] Q;
+    logic SUM;
+    logic [6:0] SSEG; 
+    
+    // instantiate your module
+    SSEG SSEG_inst    (.Q(Q), .SUM(SUM), .SSEG(SSEG));
+    
+    initial
+        begin          
+            //Test 1
+            Q = 4'b0000;
+            SUM = 4'b0000;
+
+            #10
+                    
+            //Test 2
+            Q = 4'b0001;
+            SUM = 4'b1110;
+            #10
+            
+            //Test 3
+            Q = 1;
+            SUM = 4'b0000;
+
+            #10
+            
+            //Test 4
+            Q = 1;
+            SUM = 4'b1110;
+
+            #10 
+            
+            //Test 5
+            Q = 2;
+            SUM = 4'b0000;
+            #10
+            
+            //Test 6
+            Q = 2;
+            SUM = 4'b1110;
+            #10
+                 
+            //Test 7
+            Q = 4;
+            SUM = 4'b0000;
+            #10     
+              
+            //Test 8
+            Q = 4;
+            SUM = 4'b1110;
+            #10
+             
+            //Test 9
+            Q = 8;
+            SUM = 4'b0000;
+            #10
+            
+            //Test 10
+            Q = 15;
+            SUM = 4'b1110;
+        end
+    
+endmodule
