@@ -1,30 +1,61 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: Armica Quejado, Grace Romero
-// 
-// Create Date: 08/23/2022 01:05:33 PM
+// Engineer: Armica Quejado
+// Create Date: 08/23/2022 10:31:11 AM
 // Module Name: VendingMachine
 // Project Name: Vending Machine
-// Description: Top Level Module for the Final Project
+// Description: Top Module
 //////////////////////////////////////////////////////////////////////////////////
-
 module VendingMachine(
-    input quarter,
-    input dime,
-    input nickel,
-    input button,
-    input CLK,
-    
-    output [6:0] SSEG,
-    output [4:0] AN
+    input clk,               // clock signal input
+    input quarter,         // insert quarter button input
+    input dime,            // insert dime button input
+    input nickel,          // insert nickel button input
+    input button,          // take soda button input
+    output [7:0] seg,    // seven segment display output
+    output [3:0] an      // display output
     );
+    
+    logic t1, q, d, n;    // 1 bit wide wires
+    logic [5:0] t2, t3;  // 6 bit wide wires
+    logic [7:0] t5, t6;  // 8 bit wide wires
+    logic [3:0] t4, t7;  // 4 bit wide wires
+    
+    FFSM FSM (.clk(clk), .quarter(q), .dime(d), .nickel(n), .button(button), .soda(t1), .sum(t2));
+    // FSM module has clk, button, and coin inputs, and outputs if soda should be dispensed
+    // and the amount of money in the vending machine
 
-    logic t1, t2, t3, t4, t5, t6, t7;
- 
-    Register Register (  .CLK(CLK), .Z(t2), .Q(t3));    
-    BC_DEC BC_DEC   (   .CLK(CLK), .Z(t1), .SEGMENTS(t5), .DISP_EN(t4));
-    FFSM FFSM (.CLK(CLK), .quarter(quarter), .dime(dime), .nickel(nickel), .button(button), .soda(t1), .sum(t2));
-    univ_sseg(  .cnt_1(t3), .valid(1'b1), .clk(CLK), .ssegs(t6), .disp_en(t7));
-//     MUX MUX ();
+    Registerr REGi (.CLK(clk), .Z(t2), .Q(t3));
+    // Register module has clk input and sum of coins input, and outputs the sum to the univ_sseg 
+    // at every rising edge of the clock signal
+    
+    BC_DEC BD (.CLK(clk), .Z(t1), .DISP_EN(t4), .SEGMENTS(t5));
+    // BC_DEC module has inputs clk and the soda output from the FSM, and outputs the disp_en 
+    // and seg outputs to the two multiplexors
+    
+    univ_sseg UV (.cnt1({8'b00000000, t3}), .valid(1'b1), .clk(clk), .ssegs(t6), .disp_en(t7));
+    // univ_sseg takes the sum of coins input and clk input, and is always set to be valid
+    // the outputs are disp_en to turn on certain sseg displays and sseg, which turns on the
+    // segments of each display
+    
+    Muxy MU (.soda(t1), .seg1(t5), .seg2(t6), .out(seg));
+    // this mux takes the seg outputs from univ_sseg and BC_DEC and outputs the BC_DEC seg
+    // if the selection input soda is 1, and the univ_sseg seg if the input is 0
+    
+    MuxyA MUU (.soda(t1), .an1(t4), .an2(t7), .out(an));
+    // this mux takes the an outputs from univ_sseg and BC_DEC and outputs the BC_DEC an
+    // if the selection input soda is 1, and the univ_sseg an if the input is 0
+    
+    PushButton_Debouncer PBQ (.clk(clk), .PB(quarter), .PB_up(q));
+    // this debouncer takes in the clk and quarter button input to ensure that the button is only
+    // activating once when pressed
+    
+    PushButton_Debouncer PBD (.clk(clk), .PB(dime), .PB_up(d));
+    // this debouncer takes in the clk and dime button input to ensure that the button is only
+    // activating once when pressed
+    
+    PushButton_Debouncer PBN (.clk(clk), .PB(nickel), .PB_up(n));
+    // this debouncer takes in the clk and nickel button input to ensure that the button is only
+    // activating once when pressed
     
 endmodule
