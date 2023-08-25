@@ -1,0 +1,40 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Armica Quejado
+// 
+// Create Date: 08/23/2022 09:04:37 AM
+// Module Name: SevenSeg
+// Project Name: Vending Machine
+
+//////////////////////////////////////////////////////////////////////////////////
+
+module SevenSeg(
+    input [4:0] Q,
+    input SUM,
+    output logic [6:0] SSEG // logic needed when using an always_comb block
+    );
+    
+always_comb // enables use of logic statement instead of boolean equations
+    begin
+        // 0 = on, 1 = off
+        // going from g --> a bit on seven seg display
+        case(Q)
+        0: SSEG = 7'b1000000; // number 0/ letter O
+        1: SSEG = 7'b1111001; // 1 
+        2: SSEG = 7'b0100100; // 2
+        3: SSEG = 7'b0110000; // 3
+        4: SSEG = 7'b0011001; // 4
+        5: SSEG = 7'b0010010; // 5
+        6: SSEG = 7'b0000010; // 6
+        7: SSEG = 7'b1111000; // 7
+        8: SSEG = 7'b0000000; // 8
+        9: SSEG = 7'b0010000;  // 9
+        10: SSEG = 7'b0010010; // S
+        11: SSEG = 7'b10000010; // d
+        12: SSEG = 7'b0001000; // A
+        default: SSEG = 7'b1111111; // all segments are off
+        
+   endcase
+   end //end of begin
+   
+endmodule
