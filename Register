@@ -1,0 +1,22 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Armica Quejado
+// 
+// Create Date: 08/23/2022 08:14:26 AM
+// Module Name: Register
+// Project Name: Vending Machine
+// Description: Memory Register
+//////////////////////////////////////////////////////////////////////////////////
+
+module Register #(parameter WIDTH = 5) (
+    input CLK,
+    input Z, // Z = the value inserted into the vending machine
+    
+    output logic [WIDTH:0] Q = 0
+    );
+
+    always_ff @(posedge CLK) // always_ff is evaluated at every positive edge 
+        begin
+                Q <= Z; // Q is set to Z when the button is pressed           
+      end
+endmodule
