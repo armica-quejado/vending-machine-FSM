@@ -1,0 +1,47 @@
+`timescale 1ns / 1ps
+/////////////////////////////////////////////////////////////////////////////////
+// Engineer: Armica Quejado
+// Create Date: 08/23/2022 08:35:48 AM
+// Module Name: Register_Sim
+// Project Name: Vending Machine
+//////////////////////////////////////////////////////////////////////////////////
+
+module Register_Sim(
+// no ports to test in sim
+   );
+   
+   //declare inputs and outputs to give to your module
+    logic CLK;
+    logic [5:0] Z;    
+    logic [5:0] Q;
+     
+     // instantiate your module 
+    Registerr Registerr_inst    ( .CLK(CLK), .Q(Q), .Z(Z));
+   
+     // create a clock signal with a period of 20 ns
+    always begin
+    #10 CLK = ~CLK;
+    end
+    
+    // initialize clock to 0
+    initial begin
+    CLK = 1'b0; 
+    end
+     
+    initial
+        begin          
+            //Test 1
+            CLK  = 1'b0; // clock set to 0 
+            Z = 5'b00101; // input is 5
+            #10
+            
+            //Test 2
+            CLK = 1'b1; // clock set to 1
+            Z = 5'b01010; // input is 10
+
+            //Test 3
+            CLK = 1'b0; // clock set to 0 
+            Z = 5'b11001; // input is 25 
+        
+   end 
+endmodule
