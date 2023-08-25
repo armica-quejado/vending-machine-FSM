@@ -1,0 +1,30 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Armica Quejado, Grace Romero
+// 
+// Create Date: 08/23/2022 01:05:33 PM
+// Module Name: VendingMachine
+// Project Name: Vending Machine
+// Description: Top Level Module for the Final Project
+//////////////////////////////////////////////////////////////////////////////////
+
+module VendingMachine(
+    input quarter,
+    input dime,
+    input nickel,
+    input button,
+    input CLK,
+    
+    output [6:0] SSEG,
+    output [4:0] AN
+    );
+
+    logic t1, t2, t3, t4, t5, t6, t7;
+ 
+    Register Register (  .CLK(CLK), .Z(t2), .Q(t3));    
+    BC_DEC BC_DEC   (   .CLK(CLK), .Z(t1), .SEGMENTS(t5), .DISP_EN(t4));
+    FFSM FFSM (.CLK(CLK), .quarter(quarter), .dime(dime), .nickel(nickel), .button(button), .soda(t1), .sum(t2));
+    univ_sseg(  .cnt_1(t3), .valid(1'b1), .clk(CLK), .ssegs(t6), .disp_en(t7));
+//     MUX MUX ();
+    
+endmodule
