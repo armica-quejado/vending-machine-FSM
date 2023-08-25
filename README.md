@@ -1,5 +1,9 @@
 # vending-machine-FSM
-vending machine FSM
-A vending machine is an automated machine that dispenses drinks to the customer based on the amount of coins deposited into the machine. The vending machine accepts different values of coins as inputs: Quarter (25 cents), Dime (10 cents), or Nickel (5 cents). There will be a one bit input for each type of coin, which will correspond to a different switch. Each of these will then correspond with a 5 bit output to represent the weight of the coin, such as 00101 when a nickel is inserted. When the button is pressed, the coin will be inserted, and the value in the machine will be displayed. Our machine offers drinks that cost 50 cents. Depending on how much the user has deposited, the vending machine would either dispense a drink or hold the value of coins inserted until it is equal or greater than the value of what one drink costs. When a customer wants to add coins, they will enter the desired value and click a button to indicate that they are inserting a coin. When a coin is inserted and the button is pressed, the machine moves onto the next state. Once it dispenses a drink, the excess money is returned and the machine resets back to the Start state.
-This Vending Machine has 11 different states: Start, 5, 10, 15, 20, 25, 30, 35, 40, 45, and soda. The seven segment display will update the value of the coins inserted every time the button is pressed, and when the soda state is reached, ‘SODA’ will be displayed.
+<h3 align="center">SJSU CmpE 133 Final Project</h3>
 
+## Purpose
+The purpose of this project is to design a Finite State Machine (FSM) in the form of a vending machine. The vending machine's function is to autonomously provide drinks to customers who deposit coins. The inserted coins, including Quarters (25 cents), Dimes (10 cents), and Nickels (5 cents), are identified through specific switches and translated into a 5-bit output representing their weight.
+
+Operating within 11 distinct states - Start, 5, 10, 15, 20, 25, 30, 35, 40, 45, and soda - the FSM manages the entire transaction process. Customers input the desired coin value and confirm by pressing a button. The FSM then transitions through states, updating a seven-segment display with the total value of inserted coins. Upon reaching the soda state, the display reads 'SODA'.
+
+The FSM calculates the total coin value and compares it to the drink cost of 50 cents. If the deposited coins meet or exceed this amount, a drink is dispensed, any surplus funds are returned, and the machine resets to the Start state. 
