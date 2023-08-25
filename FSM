@@ -1,0 +1,191 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer: Grace Romero
+// Create Date: 08/23/2022 02:13:49 PM
+// Module Name: FFSM
+// Project Name: Vending Machine
+// Description: FSM
+//////////////////////////////////////////////////////////////////////////////////
+module FFSM(
+    input clk,                       // clock signal input
+    input quarter,                 // debounced quarter button input
+    input dime,                    // debounced dime button input
+    input nickel,                  // debounced nickel button input
+    input button,                  // take soda button
+    output logic soda,          // dispense soda output
+    output logic [5:0] sum   // sum of coins value output
+    );
+    
+    logic [3:0] NS;
+    logic [3:0] PS = start; // initiating start to be the present state
+    
+    parameter [3:0] start = 4'b0000, five = 4'b0001, ten = 4'b0010,
+    fifteen = 4'b0011, twenty = 4'b0100, twenty5 = 4'b0101, 
+    thirty = 4'b0110, thirty5 = 4'b0111, forty = 4'b1000, 
+    forty5 = 4'b1001, drink = 4'b1010; // 11 states correspond to money in machine
+   
+    always_ff @ (posedge clk)
+    begin
+        PS <= NS; // at each rising edge of the clock, the present state becomes the next state
+    end
+    
+    always_comb
+    begin
+    sum = 6'b000000; soda = 1'b0; // total money in machine is 0 cents, and no soda dispensed
+    case(PS)
+        start:
+        begin
+        sum = 6'b000000; // no coins have been inserted in this state
+        soda = 1'b0; // no soda dispensed
+        if (quarter) // quarter input button pressed
+            NS = twenty5; // 25 cents now inserted into machine, moves onto according state
+        else if (dime) // dime input button pressed
+            NS = ten; // 10 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = five; // 5 cents now inserted into machine, moves onto according state
+        else
+            NS = start; // no coins have been inserted 
+        end
+    
+        five: 
+        begin
+        sum = 6'b000101; // 5 cents are in the machine
+        soda = 1'b0; // no soda dispensed
+        if (quarter) // quarter input button pressed
+            NS = thirty; // 30 cents now inserted into machine, moves onto according state
+        else if (dime) // dime input button pressed
+            NS = fifteen; // 15 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = ten; // 10 cents now inserted into machine, moves onto according state
+        else
+            NS = five; // 5 cents now inserted into machine, stays in the same state
+        end
+        
+        ten:
+        begin
+        sum = 6'b001010; //10 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = thirty5; // 35 cents now inserted into machine, moves onto according state
+        else if (dime) // dime input button pressed
+            NS = twenty; // 20 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = fifteen; // 15 cents now inserted into machine, moves onto according state
+        else
+            NS = ten; // 10 cents now inserted into machine, stays in the same state
+        end
+        
+        fifteen:
+        begin
+        sum = 6'b001111; // 15 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = forty; // 40 cents now inserted into machine, moves onto according state
+        else if (dime) // dime input button pressed
+            NS = twenty5; // 25 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = twenty; // 20 cents now inserted into machine, moves onto according state
+        else
+            NS = fifteen; // 15 cents now inserted into machine, stays in the same state
+        end
+        
+        twenty:
+        begin
+        sum = 6'b010100; // 20 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = forty5; // 45 cents now inserted into machine, moves onto according state
+        else if (dime) // dime input button pressed
+            NS = thirty; // 30 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = twenty5; // 25 cents now inserted into machine, moves onto according state
+        else
+            NS = twenty; // 20 cents now inserted into machine, stays in the same state
+        end
+        
+        twenty5:
+        begin
+        sum = 6'b011001; // 25 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = drink; // moves onto drink state
+        else if (dime) // dime input button pressed
+            NS = thirty5; // 35 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = thirty; // 30 cents now inserted into machine, moves onto according state
+        else
+            NS = twenty5; // 25 cents now inserted into machine, stays in the same state
+        end
+        
+        thirty:
+        begin
+        sum = 6'b011110; // 30 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = drink; // moves onto drink state
+        else if (dime) // dime input button pressed
+            NS = forty; // 40 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = thirty5; // 35 cents now inserted into machine, moves onto according state
+        else
+            NS = thirty; // 30 cents now inserted into machine, stays in the same state
+        end
+        
+        thirty5:
+        begin
+        sum = 6'b100011; // 35 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = drink; // moves onto drink state
+        else if (dime) // dime input button pressed
+            NS = forty5; // 45 cents now inserted into machine, moves onto according state
+        else if (nickel) // nickel input button pressed
+            NS = forty; // 40 cents now inserted into machine, moves onto according state
+        else
+            NS = thirty5; // 35 cents now inserted into machine, stays in the same state
+        end
+        
+        forty:
+        begin
+        sum = 6'b101000; //40 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = drink; // moves onto drink state
+        else if (dime) // dime input button pressed
+            NS = drink; // moves onto drink state
+        else if (nickel) // nickel input button pressed
+            NS = forty5; // 45 cents inserted into machine, moves onto according state
+        else
+            NS = forty; // 40 cents now inserted into machine, stays in the same state
+        end
+        
+        forty5:
+        begin
+        sum = 6'b101101; // 45 cents
+        soda = 1'b0; // no soda dispensed
+        if (quarter)  // quarter input button pressed
+            NS = drink; // moves onto drink state
+        else if (dime) // dime input button pressed
+            NS = drink; // moves onto drink state
+        else if (nickel) // nickel input button pressed
+            NS = drink; // moves onto drink state
+        else
+            NS = forty5; // 45 cents now inserted into machine, stays in the same state
+        end
+        
+        drink:
+        begin
+        sum = 6'b000000; // resets back to 0
+        soda = 1'b1; // soda is dispensed, board displays ‘SOdA’
+        
+        if (button)
+            NS = start; // the vending machine sets back to zero coins
+        else
+            NS = drink; // the button must be pressed to return to start
+        
+        end
+   
+    endcase
+    end
+    
+endmodule
