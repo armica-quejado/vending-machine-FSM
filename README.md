@@ -1,5 +1,5 @@
 # vending-machine-FSM
-<h3 align="center">SJSU CmpE 133 Final Project</h3>
+<h3 align="center">CMPE 125 Final Project</h3>
 
 ## Purpose
 The purpose of this project is to design a Finite State Machine (FSM) in the form of a vending machine. The vending machine's function is to autonomously provide drinks to customers who deposit coins. The inserted coins, including Quarters (25 cents), Dimes (10 cents), and Nickels (5 cents), are identified through specific switches and translated into a 5-bit output representing their weight.
